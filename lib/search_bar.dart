@@ -8,7 +8,7 @@ class SearchBarInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(30),
@@ -16,15 +16,15 @@ class SearchBarInput extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.search,
             color: Colors.white,
             size: 24,
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search your favorite location',
                 labelStyle: TextStyle(color: Colors.white),
                 border: InputBorder.none,
@@ -35,7 +35,7 @@ class SearchBarInput extends StatelessWidget {
               onChanged: (value) {
                 onChangeInput(value);
               },
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
         ],

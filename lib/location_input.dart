@@ -45,9 +45,9 @@ class _LocationInputState extends State<LocationInput> {
   @override
   Widget build(BuildContext context) {
     return isGettingLocation
-        ? CircularProgressIndicator()
+        ? const CircularProgressIndicator()
         : IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.location_on,
               size: 24,
               color: Colors.white,

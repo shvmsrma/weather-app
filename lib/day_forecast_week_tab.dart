@@ -10,8 +10,8 @@ class DayForecastWeekTabWidget extends StatelessWidget {
     required this.weatherType,
   });
   final String time;
-  final int minTemp;
-  final int maxTemp;
+  final double minTemp;
+  final double maxTemp;
   final String weatherType;
   IconData getCurrentWeatherIcon(weatherType) {
     switch (weatherType) {
@@ -39,7 +39,7 @@ class DayForecastWeekTabWidget extends StatelessWidget {
             children: [
               Text(
                 time.substring(0, 3),
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: const TextStyle(color: Colors.white, fontSize: 24),
               ),
               Icon(
                 getCurrentWeatherIcon(weatherType),
@@ -48,16 +48,16 @@ class DayForecastWeekTabWidget extends StatelessWidget {
               ),
               // TemperatureDisplay(temperature: temp),
               Text(
-                minTemp.toString() + '\u00B0C',
-                style: TextStyle(color: Colors.blueGrey, fontSize: 24),
+                '$minTemp\u00B0C',
+                style: const TextStyle(color: Colors.blueGrey, fontSize: 24),
               ),
               Text(
-                maxTemp.toString() + '\u00B0C',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                '$maxTemp\u00B0C',
+                style: const TextStyle(color: Colors.white, fontSize: 24),
               ),
             ],
           ),
-          Divider(
+          const Divider(
             thickness: .5,
             color: Colors.grey,
           )

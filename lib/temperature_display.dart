@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TemperatureDisplay extends StatelessWidget {
-  TemperatureDisplay(
+  const TemperatureDisplay(
       {super.key, required this.temperature, this.fontSize = 16});
-  final int temperature;
+  final double temperature;
   final double fontSize;
 
   @override

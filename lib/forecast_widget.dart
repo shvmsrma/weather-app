@@ -11,22 +11,30 @@ class ForecastWidget extends StatelessWidget {
     required this.weatherType,
   });
   final String time;
-  final int temp;
-  final int windSpeed;
-  final int rainChances;
+  final double temp;
+  final double windSpeed;
+  final double rainChances;
   final String weatherType;
   IconData getCurrentWeatherIcon(weatherType) {
-    switch (weatherType) {
-      case 'sunny':
-        return Icons.wb_sunny;
-      case 'cloudy':
-        return Icons.cloud;
-      case 'windy':
-        return Icons.wind_power;
-      case 'rainy':
-        return Icons.water_drop_sharp;
+    String condition = weatherType.toLowerCase();
+    if (condition.contains('rain') || condition.contains('drizzle')) {
+      return Icons.water_drop_sharp;
+    } else if (condition.contains('snow') || condition.contains('sleet')) {
+      return Icons.snowing;
+    } else if (condition.contains('thunder') ||
+        condition.contains('lightning')) {
+      return Icons.thunderstorm;
+    } else if (condition.contains('cloud') || condition.contains('overcast')) {
+      return Icons.cloud;
+    } else if (condition.contains('fog') || condition.contains('mist')) {
+      return Icons.cloud;
+    } else if (condition.contains('wind') || condition.contains('gust')) {
+      return Icons.wind_power;
+    } else if (condition.contains('sun') || condition.contains('clear')) {
+      return Icons.wb_sunny;
+    } else {
+      return Icons.wb_sunny;
     }
-    return Icons.wb_sunny;
   }
 
   @override
@@ -47,25 +55,25 @@ class ForecastWidget extends StatelessWidget {
         SizedBox(height: 4),
         TemperatureDisplay(temperature: temp),
         SizedBox(height: 12),
-        Icon(
+        const Icon(
           Icons.wind_power,
           size: 36,
           color: Colors.grey,
         ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
-          windSpeed.toString() + ' km/h',
+          '$windSpeed km/h',
           style: TextStyle(color: Colors.grey, fontSize: 20),
         ),
-        SizedBox(height: 12),
-        Icon(
+        const SizedBox(height: 12),
+        const Icon(
           Icons.umbrella_outlined,
           size: 36,
           color: Colors.blue,
         ),
         Text(
-          rainChances.toString() + '%',
-          style: TextStyle(color: Colors.blue, fontSize: 24),
+          '$rainChances%',
+          style: const TextStyle(color: Colors.blue, fontSize: 24),
         )
       ],
     );

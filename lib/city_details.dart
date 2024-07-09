@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CityDetails extends StatelessWidget {
-  CityDetails(
+  const CityDetails(
       {super.key,
       required this.city,
       required this.dayType,
@@ -17,52 +17,50 @@ class CityDetails extends StatelessWidget {
   final int maxTemp;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            city,
-            style: TextStyle(fontSize: 36, color: Colors.white),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          city,
+          style: TextStyle(fontSize: 36, color: Colors.white),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        const Text(
+          "Today",
+          style: TextStyle(fontSize: 24, color: Colors.grey),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        Container(
+          decoration: const BoxDecoration(
+              border: BorderDirectional(
+                  bottom:
+                      BorderSide(color: Color.fromARGB(255, 136, 135, 135)))),
+          child: Text(
+            "$temp \u00B0C",
+            style: const TextStyle(
+                fontSize: 48, color: Color.fromARGB(255, 69, 160, 235)),
           ),
-          SizedBox(
-            height: 4,
-          ),
-          Text(
-            dayType,
-            style: TextStyle(fontSize: 24, color: Colors.grey),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: BorderDirectional(
-                    bottom:
-                        BorderSide(color: Color.fromARGB(255, 136, 135, 135)))),
-            child: Text(
-              temp.toString() + " \u00B0" + "C",
-              style: TextStyle(
-                  fontSize: 48, color: const Color.fromARGB(255, 69, 160, 235)),
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Text(
-            forecastType,
-            style: TextStyle(fontSize: 24, color: Colors.grey),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Text(
-            minTemp.toString() + "/" + maxTemp.toString(),
-            style: TextStyle(color: Colors.blue, fontSize: 24),
-          )
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        Text(
+          forecastType,
+          style: TextStyle(fontSize: 24, color: Colors.grey),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        Text(
+          "$minTemp \u00B0C/$maxTemp \u00B0C",
+          style: const TextStyle(color: Colors.blue, fontSize: 24),
+        )
+      ],
     );
   }
 }

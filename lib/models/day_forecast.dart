@@ -3,8 +3,8 @@ class Forecast {
       this.time, this.temp, this.windSpeed, this.rainChances, this.weatherType);
 
   final String time;
-  final int temp;
-  final int windSpeed;
-  final int rainChances;
+  final double temp;
+  final double windSpeed;
+  final double rainChances;
   final String weatherType;
 }
