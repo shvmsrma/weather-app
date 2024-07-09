@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/city_details.dart';
+import 'package:weather_app/models/city_item.dart';
 import 'package:weather_app/models/day_forecast.dart';
 import 'package:weather_app/models/week_forecast.dart';
 import 'package:weather_app/seven_day_forecast.dart';
@@ -11,14 +12,10 @@ import 'dart:convert';
 import 'package:weather_animation/weather_animation.dart';
 
 const apiKey = 'd84f9b983e1f4d90acd124547240407';
+
 String getDayOfWeek(int epoch) {
-  // Create a DateTime object from the epoch timestamp
   DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);
-
-  // Get the day of week as an int (1 = Monday, 7 = Sunday)
   int dayOfWeekInt = date.weekday;
-
-  // Convert the int to a day name
   switch (dayOfWeekInt) {
     case 1:
       return 'Monday';
@@ -41,6 +38,7 @@ String getDayOfWeek(int epoch) {
 
 class WeatherMain extends StatefulWidget {
   const WeatherMain({super.key});
+
   @override
   State<WeatherMain> createState() => _WeatherMainState();
 }
@@ -65,6 +63,7 @@ class _WeatherMainState extends State<WeatherMain> {
   CurrentCity? cityDetails;
   List<Forecast> dayForecast = [];
   List<WeekForecast> weekForecast = [];
+
   getCurrentLocation() async {
     Location location = Location();
 
@@ -102,7 +101,6 @@ class _WeatherMainState extends State<WeatherMain> {
       isFetchingDayForecast = true;
       isFetchingWeeklyForecast = true;
     });
-    await getCurrentLocation();
     setState(() {
       isGettingLocation = false;
     });
@@ -125,7 +123,6 @@ class _WeatherMainState extends State<WeatherMain> {
       var data = jsonDecode(value.body);
       var hourlyData = data['forecast']['forecastday'][0]['hour'];
       List<Forecast> dayForecastDetails = [];
-      // Assuming 'localtime_epoch' is available to determine "now"
       int currentTimeEpoch = data['location']['localtime_epoch'];
       int closestIndex = 0;
       int updatedClosestIndex = 0;
@@ -150,15 +147,13 @@ class _WeatherMainState extends State<WeatherMain> {
         var hour = hourlyData[i];
         dayForecastDetails.add(
           Forecast(
-            i == updatedClosestIndex
-                ? 'Now'
-                : hour['time'].split(' ')[1], // Extracts "HH:MM"
+            i == updatedClosestIndex ? 'Now' : hour['time'].split(' ')[1],
             (hour['temp_c'] is int)
                 ? hour['temp_c'].toDouble()
-                : hour['temp_c'], // Ensures conversion to double if needed
+                : hour['temp_c'],
             (hour['wind_kph'] is int)
                 ? hour['wind_kph'].toDouble()
-                : hour['wind_kph'], // Ensures conversion to double if needed
+                : hour['wind_kph'],
             (hour['chance_of_rain'] is int)
                 ? hour['chance_of_rain'].toDouble()
                 : hour['chance_of_rain'],
@@ -196,10 +191,11 @@ class _WeatherMainState extends State<WeatherMain> {
       for (int i = 0; i < sortedData.length; i++) {
         var weekForecast = sortedData[i];
         weeklyForecastDetails.add(WeekForecast(
-            i == 0 ? 'Today' : getDayOfWeek(weekForecast['date_epoch']),
-            weekForecast['day']['mintemp_c'],
-            weekForecast['day']['maxtemp_c'],
-            weekForecast['day']['condition']['text']));
+          i == 0 ? 'Today' : getDayOfWeek(weekForecast['date_epoch']),
+          weekForecast['day']['mintemp_c'],
+          weekForecast['day']['maxtemp_c'],
+          weekForecast['day']['condition']['text'],
+        ));
       }
       setState(() {
         weekForecast = weeklyForecastDetails;
@@ -217,41 +213,28 @@ class _WeatherMainState extends State<WeatherMain> {
         dayType = data['current']['condition']['text'];
         temp = data['current']['temp_c'].toInt();
         forecastType = data['current']['condition']['text'];
-        minTemp = data['current']['temp_c']
-            .toInt(); // Placeholder, API does not provide min temp in the current weather endpoint
-        maxTemp = data['current']['temp_c']
-            .toInt(); // Placeholder, API does not provide max temp in the current weather endpoint
+        minTemp = data['current']['temp_c'].toInt();
+        maxTemp = data['current']['temp_c'].toInt();
       });
     });
   }
 
-  void onCityChange(value) {
+  void onCityChange(CityItem cityDetail) {
     setState(() {
-      city = value;
+      city = cityDetail.name;
+      cityDetails = CurrentCity(cityDetail.lat, cityDetail.long);
+      getCurrentWeatherDetails(cityDetail.lat, cityDetail.long);
+      getCityWeatherDetails();
     });
   }
 
   @override
   void initState() {
     super.initState();
+    getCurrentLocation();
     getCityWeatherDetails();
   }
 
-  // Widget getWrapperWidget() {
-  //   final condition = forecastType;
-  //   switch (condition) {
-  //     case 'sunny':
-  //       return SunWidget();
-  //     case 'cloudy':
-  //       return CloudWidget();
-  //     case 'windy':
-  //       return WindWidget();
-  //     case 'rainy':
-  //       return RainWidget();
-  //     default:
-  //       return Icon(Icons.error); // Fallback for unknown condition
-  //   }
-  // }
   Widget getWeatherAnimation() {
     String condition = forecastType.toLowerCase();
 
@@ -280,68 +263,78 @@ class _WeatherMainState extends State<WeatherMain> {
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
-          backgroundColor:
-              Colors.transparent, // Make the scaffold background transparent
+          backgroundColor: Colors.transparent,
           body: Stack(
             children: [
               // Weather animation background
               Positioned.fill(
                 child: getWeatherAnimation(),
               ),
-              // Your existing content
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Header(onChangeInput: onCityChange),
-                    if (isGettingLocation)
-                      const Center(child: CircularProgressIndicator())
-                    else if (isFetchingDayForecast)
-                      Column(
-                        children: [
-                          CityDetails(
-                            city: city,
-                            dayType: dayType,
-                            temp: temp,
-                            minTemp: minTemp,
-                            maxTemp: maxTemp,
-                            forecastType: forecastType,
-                          ),
-                          const Center(child: CircularProgressIndicator()),
-                        ],
-                      )
-                    else if (isFetchingWeeklyForecast)
-                      Column(
-                        children: [
-                          CityDetails(
-                            city: city,
-                            dayType: dayType,
-                            temp: temp,
-                            minTemp: minTemp,
-                            maxTemp: maxTemp,
-                            forecastType: forecastType,
-                          ),
-                          DayForecast(forecastDetails: dayForecast),
-                          const Center(child: CircularProgressIndicator()),
-                        ],
-                      )
-                    else
-                      Column(
-                        children: [
-                          CityDetails(
-                            city: city,
-                            dayType: dayType,
-                            temp: temp,
-                            minTemp: minTemp,
-                            maxTemp: maxTemp,
-                            forecastType: forecastType,
-                          ),
-                          DayForecast(forecastDetails: dayForecast),
-                          SevenDayForecast(weekWeatherDetails: weekForecast),
-                        ],
-                      ),
-                  ],
+              // Main content
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                          height: 80), // Adjust the height if necessary
+                      if (isGettingLocation)
+                        const Center(child: CircularProgressIndicator())
+                      else if (isFetchingDayForecast)
+                        Column(
+                          children: [
+                            CityDetails(
+                              city: city,
+                              dayType: dayType,
+                              temp: temp,
+                              minTemp: minTemp,
+                              maxTemp: maxTemp,
+                              forecastType: forecastType,
+                            ),
+                            const Center(child: CircularProgressIndicator()),
+                          ],
+                        )
+                      else if (isFetchingWeeklyForecast)
+                        Column(
+                          children: [
+                            CityDetails(
+                              city: city,
+                              dayType: dayType,
+                              temp: temp,
+                              minTemp: minTemp,
+                              maxTemp: maxTemp,
+                              forecastType: forecastType,
+                            ),
+                            DayForecast(forecastDetails: dayForecast),
+                            const Center(child: CircularProgressIndicator()),
+                          ],
+                        )
+                      else
+                        Column(
+                          children: [
+                            CityDetails(
+                              city: city,
+                              dayType: dayType,
+                              temp: temp,
+                              minTemp: minTemp,
+                              maxTemp: maxTemp,
+                              forecastType: forecastType,
+                            ),
+                            DayForecast(forecastDetails: dayForecast),
+                            SevenDayForecast(weekWeatherDetails: weekForecast),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
+              ),
+              // Header
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Header(
+                    onChangeInput: (CityItem city) => onCityChange(city)),
               ),
             ],
           ),

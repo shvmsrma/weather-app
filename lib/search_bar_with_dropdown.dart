@@ -3,28 +3,31 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:weather_app/models/city_item.dart';
+import 'package:weather_app/models/city_row_dropdown.dart';
+import 'package:weather_app/search_bar.dart';
 
-class SearchBarWithDropDown extends StatefulWidget {
-  SearchBarWithDropDown({super.key, required this.onSelectCity});
-  final Function onSelectCity;
+class CitySearch extends StatefulWidget {
+  final Function(CityItem) onSelectCity;
+
+  CitySearch({required this.onSelectCity});
 
   @override
-  State<SearchBarWithDropDown> createState() => _SearchBarWithDropDownState();
+  _CitySearchState createState() => _CitySearchState();
 }
 
-class _SearchBarWithDropDownState extends State<SearchBarWithDropDown> {
+class _CitySearchState extends State<CitySearch> {
   List<CityItem> cityList = [];
 
-  Future<List<CityItem>> getCityList(String filter) async {
-    print('getCityList called with filter: $filter');
-    if (filter.length < 3) {
-      print('Filter length is less than 3, returning empty list.');
-      setState(() => cityList = []);
+  Future<List<CityItem>> getCityList(String text) async {
+    print('getCityList called with filter:');
+    if (text.length < 3) {
+      setState(() {
+        cityList = [];
+      });
       return [];
     }
-
     final api_key = "d84f9b983e1f4d90acd124547240407";
-    var url = "http://api.weatherapi.com/v1/search.json?key=$api_key&q=$filter";
+    var url = "http://api.weatherapi.com/v1/search.json?key=$api_key&q=$text";
 
     var response = await http.get(Uri.parse(url));
     print({'response': response.body, 'status': response.statusCode});
@@ -40,13 +43,14 @@ class _SearchBarWithDropDownState extends State<SearchBarWithDropDown> {
             country: d['country'],
             region: d['region'],
             lat: d['lat'],
-            long: d['long'],
+            long: d['lon'],
             url: d['url']));
       });
 
       setState(() {
         cityList = _cities;
       });
+
       print('City list updated with ${_cities.length} items.');
       return _cities;
     } else {
@@ -56,67 +60,36 @@ class _SearchBarWithDropDownState extends State<SearchBarWithDropDown> {
     }
   }
 
+  onTap(CityItem city) {
+    widget.onSelectCity(city);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<CityItem>(
-      popupProps: PopupProps.menu(
-        showSearchBox: true,
-        searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            hintText: "Search for a city",
-            prefixIcon: Icon(Icons.search, color: Colors.grey),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return Column(
+      children: [
+        SearchBarInput(onChangeInput: (String str) {
+          getCityList(str);
+        }),
+        if (cityList.length > 0)
+          Container(
+            constraints: BoxConstraints(minHeight: 100),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey), color: Colors.black),
+            child: ListView(
+                shrinkWrap: true,
+                children: cityList.map((city) {
+                  return CityRow(
+                      city: city,
+                      onTap: () => {
+                            setState(() {
+                              cityList = [];
+                            }),
+                            onTap(city)
+                          });
+                }).toList()),
           ),
-        ),
-        menuProps: MenuProps(
-          backgroundColor: Colors.white,
-        ),
-        emptyBuilder: (context, searchEntry) {
-          return Center(
-            child: Text(
-              searchEntry.length < 3
-                  ? "Enter at least 3 characters to search"
-                  : "No cities found",
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          );
-        },
-      ),
-      items: cityList,
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
-          hintText: "Select a city",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.7),
-        ),
-      ),
-      asyncItems: (String filter) async {
-        print('asyncItems called with filter: $filter');
-        return await getCityList(filter);
-      },
-      itemAsString: (CityItem? u) => u?.name ?? "",
-      onChanged: (CityItem? data) {
-        if (data != null) {
-          print('City selected: ${data.name}, ${data.country}');
-          widget.onSelectCity(data);
-        }
-      },
-      dropdownBuilder: (context, selectedItem) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: selectedItem == null
-              ? Text("Select a city", style: TextStyle(color: Colors.grey[600]))
-              : Text(
-                  "${selectedItem.name}, ${selectedItem.country}",
-                  style: TextStyle(color: Colors.black87),
-                ),
-        );
-      },
+      ],
     );
   }
 }
