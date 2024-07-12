@@ -19,7 +19,6 @@ class _CitySearchState extends State<CitySearch> {
   List<CityItem> cityList = [];
 
   Future<List<CityItem>> getCityList(String text) async {
-    print('getCityList called with filter:');
     if (text.length < 3) {
       setState(() {
         cityList = [];
@@ -35,7 +34,6 @@ class _CitySearchState extends State<CitySearch> {
     if (response.statusCode == 200) {
       List<CityItem> _cities = [];
       var data = jsonDecode(response.body) as List;
-      print({'data': data});
       data.forEach((d) {
         _cities.add(CityItem(
             id: d['id'],
