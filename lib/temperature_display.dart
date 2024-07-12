@@ -11,11 +11,11 @@ class TemperatureDisplay extends StatelessWidget {
     Color textColor;
 
     if (temperature < 15) {
-      textColor = Colors.blue;
+      textColor = Color.fromARGB(255, 130, 191, 242);
     } else if (temperature >= 15 && temperature <= 25) {
-      textColor = Colors.orange;
+      textColor = Color.fromARGB(255, 233, 192, 121);
     } else {
-      textColor = Colors.red;
+      textColor = Color.fromARGB(255, 243, 117, 20);
     }
 
     return Text(

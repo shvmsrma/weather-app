@@ -16,21 +16,26 @@ class SearchBarInput extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.search,
-            color: Colors.white,
-            size: 24,
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: const Icon(
+              Icons.search,
+              size: 24,
+              color: Colors.white,
+            ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 8), // Space between icon and text
           Expanded(
             child: TextField(
+              textAlignVertical: TextAlignVertical.center,
               decoration: const InputDecoration(
-                labelText: 'Search your favorite location',
-                labelStyle: TextStyle(color: Colors.white),
                 border: InputBorder.none,
+                contentPadding:
+                    EdgeInsets.only(bottom: 12), // Adjust internal padding
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                labelText: 'Search for city',
+                labelStyle: TextStyle(color: Colors.white),
                 isDense: true, // This reduces the height of the TextField
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 8), // Adjust vertical padding
               ),
               onChanged: (value) {
                 onChangeInput(value);

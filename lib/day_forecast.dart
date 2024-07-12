@@ -10,9 +10,15 @@ class DayForecast extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(
+          height: 24,
+        ),
         const Text(
           "Forecast for today",
-          style: TextStyle(color: Colors.white, fontSize: 24),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(20),

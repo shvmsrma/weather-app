@@ -15,25 +15,57 @@ class ForecastWidget extends StatelessWidget {
   final double windSpeed;
   final double rainChances;
   final String weatherType;
-  IconData getCurrentWeatherIcon(weatherType) {
+  Widget getCurrentWeatherWidget(weatherType) {
     String condition = weatherType.toLowerCase();
     if (condition.contains('rain') || condition.contains('drizzle')) {
-      return Icons.water_drop_sharp;
+      return const Icon(
+        Icons.water_drop_sharp,
+        size: 36,
+        color: Color.fromARGB(255, 84, 170, 217),
+      );
     } else if (condition.contains('snow') || condition.contains('sleet')) {
-      return Icons.snowing;
+      return const Icon(
+        Icons.snowing,
+        size: 36,
+        color: Color.fromARGB(255, 221, 220, 220),
+      );
     } else if (condition.contains('thunder') ||
         condition.contains('lightning')) {
-      return Icons.thunderstorm;
+      return const Icon(
+        Icons.thunderstorm,
+        size: 36,
+        color: Color.fromARGB(255, 147, 146, 146),
+      );
     } else if (condition.contains('cloud') || condition.contains('overcast')) {
-      return Icons.cloud;
+      return const Icon(
+        Icons.cloud,
+        size: 36,
+        color: Colors.white,
+      );
     } else if (condition.contains('fog') || condition.contains('mist')) {
-      return Icons.cloud;
+      return const Icon(
+        Icons.cloud,
+        size: 36,
+        color: Colors.white,
+      );
     } else if (condition.contains('wind') || condition.contains('gust')) {
-      return Icons.wind_power;
+      return const Icon(
+        Icons.wind_power,
+        size: 36,
+        color: Colors.white,
+      );
     } else if (condition.contains('sun') || condition.contains('clear')) {
-      return Icons.wb_sunny;
+      return const Icon(
+        Icons.wb_sunny,
+        size: 36,
+        color: Color.fromARGB(255, 237, 232, 69),
+      );
     } else {
-      return Icons.wb_sunny;
+      return const Icon(
+        Icons.wb_sunny,
+        size: 36,
+        color: Color.fromARGB(255, 237, 232, 69),
+      );
     }
   }
 
@@ -47,11 +79,7 @@ class ForecastWidget extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
         SizedBox(height: 4),
-        Icon(
-          getCurrentWeatherIcon(weatherType),
-          size: 36,
-          color: Colors.white,
-        ),
+        getCurrentWeatherWidget(weatherType),
         SizedBox(height: 4),
         TemperatureDisplay(temperature: temp),
         SizedBox(height: 12),
