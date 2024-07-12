@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/day_forecast_week_tab.dart';
+import 'package:weather_app/widgets/day_forecast_week_tab.dart';
 import 'package:weather_app/models/week_forecast.dart';
 
 class SevenDayForecast extends StatelessWidget {

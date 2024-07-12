@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weather_app/city_details.dart';
+import 'package:weather_app/widgets/city_details.dart';
 import 'package:weather_app/models/city.dart';
 import 'package:weather_app/models/city_item.dart';
 import 'package:weather_app/models/day_forecast.dart';
 import 'package:weather_app/models/week_forecast.dart';
-import 'package:weather_app/seven_day_forecast.dart';
-import 'package:weather_app/day_forecast.dart';
-import 'package:weather_app/header.dart';
+import 'package:weather_app/widgets/seven_day_forecast.dart';
+import 'package:weather_app/widgets/day_forecast.dart';
+import 'package:weather_app/widgets/header.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:weather_animation/weather_animation.dart';
-import 'package:weather_app/actions.dart';
+import 'package:weather_app/widgets/actions.dart';
 
 String getDayOfWeek(int epoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(epoch * 1000);

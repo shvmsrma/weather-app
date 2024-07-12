@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/models/city.dart';
-import 'package:weather_app/temperature_display.dart';
+import 'package:weather_app/widgets/temperature_display.dart';
 
 class CityDetails extends StatelessWidget {
   const CityDetails({super.key, required this.cityDetails});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/temperature_display.dart';
+import 'package:weather_app/widgets/temperature_display.dart';
 
 class DayForecastWeekTabWidget extends StatelessWidget {
   const DayForecastWeekTabWidget({

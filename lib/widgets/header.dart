@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/location_input.dart';
+import 'package:weather_app/widgets/location_input.dart';
 import 'package:weather_app/models/city_item.dart';
-import 'package:weather_app/search_bar.dart';
-import 'package:weather_app/search_bar_with_dropdown.dart';
+import 'package:weather_app/widgets/search_bar.dart';
+import 'package:weather_app/widgets/search_bar_with_dropdown.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key, required this.onChangeInput});

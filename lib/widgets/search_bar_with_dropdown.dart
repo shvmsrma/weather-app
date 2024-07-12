@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:weather_app/models/city_item.dart';
 import 'package:weather_app/models/city_row_dropdown.dart';
-import 'package:weather_app/search_bar.dart';
+import 'package:weather_app/widgets/search_bar.dart';
 
 class CitySearch extends StatefulWidget {
   final Function(CityItem) onSelectCity;
